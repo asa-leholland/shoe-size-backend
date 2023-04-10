@@ -30,7 +30,7 @@ def convert_size(data_path: str, unit: ShoeSizeCategory, size: str, location: Sh
         data = json.load(f)
 
     for item in data:
-        if item["Unit"] == unit.value:
-            print(item[location.value])
+        if item["Unit"][:8] == unit.value[:8]:
             index = item[location.value].index(size)
             return item[converted_location.value][index]
+    raise Exception("Invalid unit", unit.value)
