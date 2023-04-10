@@ -1,5 +1,5 @@
-from main import convert_size
-from main import ShoeSizeCategory, ShoeSizeSystem
+from python_version.main import convert_size
+from python_version.main import ShoeSizeCategory, ShoeSizeSystem
 
 
 def test_should_calculate_size():
@@ -13,8 +13,7 @@ def test_should_calculate_size():
     assert result == '40-41'
 
 
-
-def test_should_calculate_size():
+def test_should_calculate_size_of_big_kids_shoe():
     result = convert_size(
         'shoe_sizes.json',
         size='4',
@@ -23,6 +22,18 @@ def test_should_calculate_size():
         converted_location=ShoeSizeSystem.EUROPE
         )
     assert result == '37'
+
+
+def test_should_calculate_size_of_size_provided():
+    result = convert_size(
+        'shoe_sizes.json',
+        size='7.9',
+        unit=ShoeSizeCategory.INFANTS,
+        location=ShoeSizeSystem.CENTIMETERS,
+        converted_location=ShoeSizeSystem.CENTIMETERS
+        )
+    assert result == '7.9'
+
 
 def test_should_raise_exception_when_data_path_is_invalid():
     try:
@@ -74,6 +85,7 @@ def test_should_raise_exception_when_location_is_invalid():
             )
     except Exception as e:
         assert e is not None
+
 
 def test_should_raise_exception_when_converted_location_is_invalid():
     try:
