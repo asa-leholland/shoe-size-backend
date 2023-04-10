@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shoe Size Converter</title>
+</head>
+<body>
+    <label for="unit">Unit:</label>
+    <select id="unit">
+        <option value="">-- Select a unit --</option>
+        <option value="Women's">Women's</option>
+        <option value="Men's">Men's</option>
+        <option value="Big Kids' (7–12 Years)">Big Kids' (7–12 Years)</option>
+        <option value="Little Kids' (4–7 Years)">Little Kids' (4–7 Years)</option>
+        <option value="Toddlers' (9 Months - 4 Years)">Toddlers' (9 Months - 4 Years)</option>
+        <option value="Infants' (0–9 Months)">Infants' (0–9 Months)</option>
+    </select>
+    <br/>
+
+    <label for="location">Location:</label>
+    <select id="location">
+        <option value="">-- Select a location --</option>
+        <option value="US & Canada">US & Canada</option>
+        <option value="UK">UK</option>
+        <option value="Europe">Europe</option>
+        <option value="Inches">Inches</option>
+        <option value="Centimeters">Centimeters</option>
+    </select>
+    <br/>
+    <label for="size">Size:</label>
+    <select id="size">
+        <option value="">-- Select a size --</option>
+    </select>
+    <br/>
+    <label for="convertedLocation">Converted Location:</label>
+    <select id="convertedLocation">
+        <option value="">-- Select a converted location --</option>
+        <option value="US & Canada">US & Canada</option>
+        <option value="UK">UK</option>
+        <option value="Europe">Europe</option>
+        <option value="Inches">Inches</option>
+        <option value="Centimeters">Centimeters</option>
+    </select>
+    <br/>
+    <div></div>
+    <br/>
+    <label for="result">Result:</label>
+    <input type="text" id="result" readonly>
+    <br/>
+    <br/>
+    <script src="models/main.js"></script>
+    <script>
+        const { ShoeSizeCategory, ShoeSizeSystem, convertSize } = require('./models/main');
+
+        const unitDropdown = document.getElementById('unit');
+        const locationDropdown = document.getElementById('location');
+        const sizeDropdown = document.getElementById('size');
+        const convertedLocationDropdown = document.getElementById('convertedLocation');
+        const resultInput = document.getElementById('result');
+
+        unitDropdown.addEventListener('change', updateSizeDropdown);
+        locationDropdown.addEventListener('change', convertAndDisplaySize);
+        sizeDropdown.addEventListener('change', convertAndDisplaySize);
+        convertedLocationDropdown.addEventListener('change', convertAndDisplaySize);
+
+        function updateSizeDropdown() {
+            const selectedUnit = unitDropdown.value;
+            sizeDropdown.innerHTML = '<option value="">-- Select a size --</option>';
+            if (selectedUnit) {
+                const dataPath = `./data/${selectedUnit}.json`;
+                const data = require(dataPath);
+                for (const item of data) {
+                    sizeDropdown.innerHTML += `<option value="${item[ShoeSizeSystem.US_CANADA][0]}">${item[ShoeSizeSystem.US_CANADA][0]}</option>`;
+                }
+            }
+        }
+
+        function convertAndDisplaySize() {
+            const selectedUnit = unitDropdown.value;
+            const selectedLocation = locationDropdown.value;
+            const selectedSize = sizeDropdown.value;
+            const selectedConvertedLocation = convertedLocationDropdown.value;
+            if        (selectedUnit && selectedLocation && selectedSize && selectedConvertedLocation) {
+                try {
+                    const convertedSize = convertSize(`./data/${selectedUnit}.json`, selectedUnit, selectedSize, selectedLocation, selectedConvertedLocation);
+                    resultInput.value = `${convertedSize} ${selectedConvertedLocation}`;
+                } catch (error) {
+                    console.error(error);
+                    resultInput.value = 'Invalid input';
+                }
+            } else {
+                resultInput.value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
