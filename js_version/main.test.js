@@ -3,8 +3,6 @@ const { convertSize, ShoeSizeCategory, ShoeSizeSystem } = require('./main');
 
 
 test('should calculate size', () => {
-    console.log(ShoeSizeCategory);
-    console.log(ShoeSizeSystem);
   const result = convertSize(
     'shoe_sizes.json',
     ShoeSizeCategory.MENS,
