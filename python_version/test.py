@@ -1,5 +1,5 @@
-from python_version.main import convert_size
-from python_version.main import ShoeSizeCategory, ShoeSizeSystem
+from main import convert_size
+from main import ShoeSizeCategory, ShoeSizeSystem
 
 
 def test_should_calculate_size():
